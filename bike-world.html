@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOTO WORLD — Every Bike. Every Detail.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #ff4d00;
+    --accent2: #ffb300;
+    --text: #e8e8e8;
+    --muted: #666;
+    --card: #141414;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,77,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,77,0,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 40px 40px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .logo-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .badge {
+    background: var(--accent);
+    color: #000;
+    font-family: 'Bebas Neue';
+    font-size: 0.9rem;
+    padding: 4px 12px;
+    letter-spacing: 2px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 40px 50px;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 10vw, 9rem);
+    line-height: 0.95;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #fff 30%, #ff4d00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 50px;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 0;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 20px 160px 20px 28px;
+    letter-spacing: 1px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(255,77,0,0.15);
+  }
+
+  .search-wrap input::placeholder {
+    color: #333;
+  }
+
+  .search-wrap button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    padding: 0 30px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .search-wrap button:hover { background: #ff6a2a; }
+  .search-wrap button:active { transform: scale(0.98); }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .suggestion-tag {
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+
+  .suggestion-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255,77,0,0.05);
+  }
+
+  /* RESULTS */
+  #results {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .result-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .result-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+
+  .result-year {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  /* SPECS GRID */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .spec-card {
+    background: var(--card);
+    padding: 24px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  .spec-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+
+  .spec-card:hover::before { transform: scaleY(1); }
+
+  .spec-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .spec-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .spec-unit {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-left: 4px;
+  }
+
+  /* HIGHLIGHT CARDS */
+  .info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+    animation: fadeIn 0.5s ease both;
+  }
+
+  .info-card.full { grid-column: 1 / -1; }
+
+  .info-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .info-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #aaa;
+    font-weight: 500;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    background: rgba(255,77,0,0.1);
+    border: 1px solid rgba(255,77,0,0.3);
+    color: var(--accent);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    letter-spacing: 1px;
+  }
+
+  /* VARIANTS TABLE */
+  .variants-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+
+  .variants-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .variants-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1a1a;
+    color: #bbb;
+    font-weight: 500;
+  }
+
+  .variants-table tr:hover td { background: rgba(255,77,0,0.03); color: var(--text); }
+
+  /* STAT BAR */
+  .stat-bar-wrap { margin: 10px 0; }
+  .stat-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+  .stat-bar-track {
+    height: 4px;
+    background: #1e1e1e;
+    position: relative;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 1s cubic-bezier(.23,1,.32,1);
+  }
+
+  /* ERROR */
+  .error-state {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .error-state .big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    color: #1e1e1e;
+    letter-spacing: 4px;
+  }
+  .error-state p {
+    color: var(--muted);
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  /* FEATURED SECTION */
+  .featured-section {
+    position: relative;
+    z-index: 10;
+    padding: 0 40px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2px;
+  }
+
+  .featured-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .featured-card:hover { border-color: #333; transform: translateY(-2px); }
+  .featured-card:hover::after { transform: scaleX(1); }
+
+  .fc-brand {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .fc-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .fc-cc {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .loading {
+    text-align: center;
+    padding: 60px;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--accent);
+    letter-spacing: 4px;
+    font-size: 0.9rem;
+    animation: pulse 1s ease infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+  }
+
+  footer {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #333;
+    letter-spacing: 2px;
+  }
+
+  @media (max-width: 640px) {
+    header, .hero, #results, .featured-section { padding-left: 20px; padding-right: 20px; }
+    .info-row { grid-template-columns: 1fr; }
+    .info-card.full { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">MOTO<span>WORLD</span></div>
+    <div class="logo-sub">The Global Motorcycle Encyclopedia</div>
+  </div>
+  <div class="badge">FREE · NO LOGIN</div>
+</header>
+
+<section class="hero">
+  <div class="hero-title">EVERY BIKE.<br>EVERY DETAIL.</div>
+  <div class="hero-sub">Search any motorcycle — specs, history, engine, performance</div>
+
+  <div class="search-wrap">
+    <input type="text" id="bikeSearch" placeholder="e.g. Kawasaki Ninja ZX-10R, Royal Enfield Bullet..." autocomplete="off" />
+    <button onclick="searchBike()">SEARCH</button>
+  </div>
+
+  <div class="suggestions">
+    <span class="suggestion-tag" onclick="quickSearch('Kawasaki Ninja ZX-10R')">Kawasaki Ninja ZX-10R</span>
+    <span class="suggestion-tag" onclick="quickSearch('Ducati Panigale V4')">Ducati Panigale V4</span>
+    <span class="suggestion-tag" onclick="quickSearch('Royal Enfield Bullet 350')">Royal Enfield Bullet 350</span>
+    <span class="suggestion-tag" onclick="quickSearch('BMW R 1250 GS')">BMW R 1250 GS</span>
+    <span class="suggestion-tag" onclick="quickSearch('Honda CBR1000RR')">Honda CBR1000RR</span>
+    <span class="suggestion-tag" onclick="quickSearch('Harley-Davidson Sportster')">Harley-Davidson Sportster</span>
+    <span class="suggestion-tag" onclick="quickSearch('Yamaha MT-09')">Yamaha MT-09</span>
+    <span class="suggestion-tag" onclick="quickSearch('Suzuki Hayabusa')">Suzuki Hayabusa</span>
+    <span class="suggestion-tag" onclick="quickSearch('KTM Duke 390')">KTM Duke 390</span>
+    <span class="suggestion-tag" onclick="quickSearch('Hero Splendor Plus')">Hero Splendor Plus</span>
+    <span class="suggestion-tag" onclick="quickSearch('Triumph Bonneville T120')">Triumph Bonneville T120</span>
+    <span class="suggestion-tag" onclick="quickSearch('MV Agusta F4')">MV Agusta F4</span>
+  </div>
+</section>
+
+<div id="results"></div>
+
+<section class="featured-section" id="featuredSection">
+  <div class="section-heading">LEGENDARY MACHINES</div>
+  <div class="featured-grid" id="featuredGrid"></div>
+</section>
+
+<footer>
+  <span>© 2024 MOTOWORLD — GLOBAL MOTORCYCLE ENCYCLOPEDIA</span>
+  <span>NO REGISTRATION · NO ADS · FREE FOR ALL</span>
+</footer>
+
+<script>
+// ─── COMPREHENSIVE BIKE DATABASE ──────────────────────────────────────────────
+const BIKES = {
+  // ══════════════════════════════════════════════════════════
+  //  KAWASAKI
+  // ══════════════════════════════════════════════════════════
+  "kawasaki ninja zx-10r": {
+    brand: "Kawasaki", name: "Ninja ZX-10R", year: "2021–Present",
+    category: "Supersport", origin: "Japan",
+    cc: "998", engine: "In-line 4-cylinder, DOHC, 16 valves",
+    power: "203 hp @ 13,200 rpm", torque: "114.9 Nm @ 11,400 rpm",
+    topSpeed: "299 km/h", mileage: "14–16 km/l",
+    weight: "207 kg", fuelTank: "17 L",
+    transmission: "6-speed cassette type", cooling: "Liquid cooled",
+    frame: "High-tensile steel, twin-spar",
+    brakes: "Dual 330mm discs (front), 220mm disc (rear)",
+    suspension: "43mm inverted forks (front), Uni-Trak linkage (rear)",
+    intro: "The Kawasaki Ninja ZX-10R is Kawasaki's flagship superbike, honed through decades of WorldSBK championship racing. The current generation uses Showa Balance Free Fork technology and Kawasaki Cornering Management Function (KCMF) electronics.",
+    history: "First introduced in 2004, the ZX-10R has evolved continuously from championship-winning lessons. Jonathan Rea won 6 consecutive WorldSBK titles on its racing counterpart, making this street bike a direct heir to champion-proven technology.",
+    specialty: "KCMF traction control, launch control, cornering ABS, 5 riding modes, Öhlins TTX36 rear shock available, KQS quickshifter, 3-mode power delivery, Brembo Stylema calipers",
+    pros: ["Championship-proven engine", "Excellent cornering electronics", "Track-ready straight from factory", "Strong after-market support"],
+    tags: ["Superbike", "Track", "WSBK", "High-Performance", "Electronics-Packed"],
+    variants: [
+      { name: "Ninja ZX-10R Standard", year: "2021", price: "~₹15.99 L" },
+      { name: "Ninja ZX-10R SE", year: "2021", price: "~₹18.50 L" },
+      { name: "Ninja ZX-10RR", year: "2023", price: "~₹23 L" },
+    ]
+  },
+
+  "kawasaki z900": {
+    brand: "Kawasaki", name: "Z900", year: "2017–Present",
+    category: "Naked Streetfighter", origin: "Japan",
+    cc: "948", engine: "In-line 4-cylinder, DOHC, 16 valves",
+    power: "125 hp @ 9,500 rpm", torque: "98.6 Nm @ 7,700 rpm",
+    topSpeed: "240 km/h", mileage: "18–22 km/l",
+    weight: "193 kg", fuelTank: "17 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Kawasaki Z900 is an aggressive naked streetfighter featuring the iconic 'Sugomi' design philosophy. It blends practical daily usability with sharp performance credentials.",
+    history: "Successor to the legendary Z800, the Z900 debuted in 2017 with a completely new 948cc engine. 2020 saw full LED lighting, new TFT display, and cornering lights.",
+    specialty: "Sugomi aggressive design, TFT instrumentation, KTRC traction control, cornering lights (2020+), Kawasaki Intelligent anti-lock Braking System",
+    pros: ["Lightweight for a litre class", "Thrilling mid-range power", "Excellent value", "Strong resale"],
+    tags: ["Naked", "Streetfighter", "Daily Rider", "Mid-Range"],
+    variants: [
+      { name: "Z900", year: "2023", price: "~₹8.5 L" },
+      { name: "Z900 SE", year: "2023", price: "~₹10.5 L" },
+    ]
+  },
+
+  "kawasaki ninja 400": {
+    brand: "Kawasaki", name: "Ninja 400", year: "2018–Present",
+    category: "Sport", origin: "Japan",
+    cc: "399", engine: "Parallel-Twin, DOHC",
+    power: "49 hp @ 10,000 rpm", torque: "38 Nm @ 8,000 rpm",
+    topSpeed: "200 km/h", mileage: "22–26 km/l",
+    weight: "167 kg", fuelTank: "14 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "Widely regarded as the best 400cc sportbike ever made. The Ninja 400 bridges the gap between beginner-friendly and genuinely thrilling with a high-revving twin cylinder engine in a light chassis.",
+    history: "Launched in 2018 replacing the Ninja 300, this bike was so well received that it won the 'Best Small Sportbike' award from multiple outlets for 3 consecutive years.",
+    specialty: "Best power-to-weight in 400cc class, Supersport DNA in a friendly package, slipper clutch, assist clutch, KQS quickshifter available",
+    pros: ["Beginner and expert friendly", "Best 400cc sportbike", "Light and nimble", "Excellent build quality"],
+    tags: ["Sport", "Entry Level", "Commuter", "Beginner-Friendly"],
+    variants: [
+      { name: "Ninja 400 ABS", year: "2023", price: "~₹4.99 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  DUCATI
+  // ══════════════════════════════════════════════════════════
+  "ducati panigale v4": {
+    brand: "Ducati", name: "Panigale V4", year: "2018–Present",
+    category: "Supersport", origin: "Italy",
+    cc: "1103", engine: "Desmosedici Stradale V4, Desmodromic, 4 valves/cyl",
+    power: "214 hp @ 13,000 rpm", torque: "124 Nm @ 9,500 rpm",
+    topSpeed: "305 km/h", mileage: "12–15 km/l",
+    weight: "198 kg", fuelTank: "16 L",
+    transmission: "6-speed", cooling: "Liquid cooled, oil cooled",
+    frame: "Aluminum front frame using engine as stressed member",
+    intro: "The Ducati Panigale V4 is a revolution for Ducati, adopting MotoGP-derived V4 engine architecture for the first time on a road bike. Named after the Borgo Panigale district in Bologna, its spiritual home.",
+    history: "Evolved from the Panigale V2/1299, the V4 borrowed the Desmosedici GP engine layout in 2018. The V4S added Öhlins Smart EC 2.0 suspension while V4R is the full homologation special with titanium Akrapovič exhaust.",
+    specialty: "MotoGP Desmosedici GP-derived engine, counter-rotating crankshaft (anti-lift), Bosch Cornering ABS, DTC traction control, DWC wheelie control, EBC engine brake control, DQS quickshifter, Öhlins NIX30/TTX36 (S model)",
+    pros: ["MotoGP heritage", "Exotic Italian engineering", "Desmodromic valve system", "Best soundtrack of any production bike"],
+    tags: ["Superbike", "Italian Exotic", "MotoGP DNA", "Track Monster"],
+    variants: [
+      { name: "Panigale V4", year: "2023", price: "~₹26.99 L" },
+      { name: "Panigale V4S", year: "2023", price: "~₹32.99 L" },
+      { name: "Panigale V4R", year: "2023", price: "~₹56 L" },
+      { name: "Panigale V4 SP2", year: "2023", price: "~₹42 L" },
+    ]
+  },
+
+  "ducati monster": {
+    brand: "Ducati", name: "Monster", year: "1993–Present",
+    category: "Naked", origin: "Italy",
+    cc: "937", engine: "Testastretta 11° V-Twin, DOHC",
+    power: "111 hp @ 9,250 rpm", torque: "93 Nm @ 6,500 rpm",
+    topSpeed: "225 km/h", mileage: "15–18 km/l",
+    weight: "188 kg", fuelTank: "14 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Ducati Monster is the bike that saved Ducati. Miguel Galluzzi's naked design concept launched a whole new segment of motorcycling when it debuted in 1993.",
+    history: "The Monster series began in 1993 with the M900. It defined the 'naked' motorcycle category globally and became Ducati's best-selling line. The 2021 Monster went to a new aluminum frame and dropped the steel trellis for the first time.",
+    specialty: "Iconic trellis frame (classic models), Ducati Quick Shift, Cornering ABS, Ducati Traction Control, 3 riding modes, lean-angle sensing IMU",
+    pros: ["Icon status", "Exciting V-twin character", "Usable power", "Italian style"],
+    tags: ["Naked", "Icon", "V-Twin", "Street"],
+    variants: [
+      { name: "Monster", year: "2023", price: "~₹10.99 L" },
+      { name: "Monster SP", year: "2023", price: "~₹13.49 L" },
+      { name: "Monster 30° Anniversario", year: "2023", price: "~₹18.99 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  ROYAL ENFIELD
+  // ══════════════════════════════════════════════════════════
+  "royal enfield bullet 350": {
+    brand: "Royal Enfield", name: "Bullet 350", year: "1955–Present",
+    category: "Classic / Heritage", origin: "India/UK",
+    cc: "349", engine: "Single cylinder, SOHC, 2 valves, air-cooled",
+    power: "20.4 hp @ 6,100 rpm", torque: "27 Nm @ 4,000 rpm",
+    topSpeed: "130 km/h", mileage: "35–42 km/l",
+    weight: "195 kg", fuelTank: "13.5 L",
+    transmission: "5-speed", cooling: "Air cooled",
+    intro: "The Royal Enfield Bullet 350 is the longest continuously produced motorcycle model in history, making it a living legend. It is synonymous with the heritage of Indian motorcycling.",
+    history: "Born from the British Royal Enfield, production moved to India in 1955 at the Madras factory. The Bullet's distinctive 'thump' sound and cast iron engine defined generations of riders. The 2023 model received a completely new J-series engine retaining its traditional soul.",
+    specialty: "World's longest-produced motorcycle (since 1932), iconic thump exhaust note, new J-platform engine (2023), switchable ABS, 3-pod instrument console, USB charging",
+    pros: ["Historical significance", "Affordable", "Reliable", "Easy to maintain", "Strong resale"],
+    tags: ["Classic", "Heritage", "Icon", "Retro", "Budget"],
+    variants: [
+      { name: "Bullet 350", year: "2023", price: "~₹1.73 L" },
+      { name: "Bullet 350 Militaire", year: "2023", price: "~₹1.87 L" },
+    ]
+  },
+
+  "royal enfield himalayan": {
+    brand: "Royal Enfield", name: "Himalayan", year: "2016–Present",
+    category: "Adventure Tourer", origin: "India",
+    cc: "411", engine: "Single cylinder, SOHC, air-cooled (Gen1) / 452cc liquid cooled (Gen2)",
+    power: "24.3 hp (Gen1) / 40 hp (Gen2)", torque: "32 Nm / 40 Nm",
+    topSpeed: "140 km/h / 160 km/h", mileage: "30–35 km/l",
+    weight: "199 kg", fuelTank: "15 L",
+    transmission: "5-speed (Gen1) / 6-speed (Gen2)", cooling: "Air cooled / Liquid cooled",
+    intro: "The Royal Enfield Himalayan is India's purpose-built adventure motorcycle, designed for both off-road exploration and long-distance highway touring at a democratically affordable price point.",
+    history: "Launched in 2016 as India's first purpose-built adventure tourer, it opened the ADV segment to the masses. The 2023 Gen 2 Himalayan 450 brought a liquid-cooled engine, round TFT display, and class-leading off-road capability.",
+    specialty: "Long travel suspension, 21-inch front wheel, highway pegs, GPS mount, Tripper turn-by-turn navigation, switchable ABS for off-road",
+    pros: ["Best budget adventure bike", "Off-road capable", "Easy to maintain anywhere", "Strong community"],
+    tags: ["Adventure", "Off-Road", "Touring", "Budget ADV"],
+    variants: [
+      { name: "Himalayan 411", year: "2023", price: "~₹2.15 L" },
+      { name: "Himalayan 450", year: "2024", price: "~₹2.69 L" },
+    ]
+  },
+
+  "royal enfield classic 350": {
+    brand: "Royal Enfield", name: "Classic 350", year: "2008–Present",
+    category: "Classic / Retro", origin: "India",
+    cc: "349", engine: "Single cylinder, SOHC, J-series, air-oil cooled",
+    power: "20.2 hp @ 6,100 rpm", torque: "27 Nm @ 4,000 rpm",
+    topSpeed: "135 km/h", mileage: "34–40 km/l",
+    weight: "195 kg", fuelTank: "13 L",
+    transmission: "5-speed", cooling: "Air-oil cooled",
+    intro: "India's best-selling premium motorcycle, the Royal Enfield Classic 350 blends vintage aesthetics with modern engineering. It offers an emotional, characterful riding experience that mass-market bikes cannot replicate.",
+    history: "Introduced in 2008, the Classic 350 has consistently been India's top-selling premium motorcycle. The 2021 model brought the all-new J-series engine with SOHC, balancer shaft, and significantly improved refinement.",
+    specialty: "Retro teardrop fuel tank, chrome accents, dual-channel ABS, tripper navigation compatible, 3 cluster instrument console, USB charging",
+    pros: ["Best looks in segment", "Strong brand community (RE Club)", "High resale value", "Touring comfort"],
+    tags: ["Classic", "Retro", "Best-Seller", "Indian Icon"],
+    variants: [
+      { name: "Classic 350 Redditch", year: "2023", price: "~₹1.93 L" },
+      { name: "Classic 350 Signals", year: "2023", price: "~₹2.09 L" },
+      { name: "Classic 350 Dark", year: "2023", price: "~₹2.06 L" },
+      { name: "Classic 350 Chrome", year: "2023", price: "~₹2.17 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  BMW
+  // ══════════════════════════════════════════════════════════
+  "bmw r 1250 gs": {
+    brand: "BMW Motorrad", name: "R 1250 GS", year: "2019–Present",
+    category: "Adventure Tourer", origin: "Germany",
+    cc: "1254", engine: "Boxer Twin, air/liquid cooled, ShiftCam technology",
+    power: "136 hp @ 7,750 rpm", torque: "143 Nm @ 6,250 rpm",
+    topSpeed: "220 km/h", mileage: "18–22 km/l",
+    weight: "249 kg", fuelTank: "20 L",
+    transmission: "6-speed", cooling: "Air/liquid hybrid cooled",
+    intro: "The BMW R 1250 GS is the world's most successful adventure motorcycle and has defined the category since the original R80 GS. It is the benchmark against which all other adventure bikes are measured.",
+    history: "The GS lineage began with the 1980 R80 G/S, which competed in the Paris-Dakar Rally. The R 1250 GS introduced BMW's groundbreaking ShiftCam variable valve timing system in 2019, improving both power and economy.",
+    specialty: "ShiftCam variable valve timing, Dynamic ESA suspension, Hill Start Control, Dynamic Traction Control (DTC), Riding Modes Pro, 6.5-inch TFT, heated grips standard, 3 riding modes",
+    pros: ["World's best ADV", "Exceptional technology", "Incredible touring range", "Massive aftermarket"],
+    tags: ["Adventure", "BMW", "Touring", "Premium", "Technology"],
+    variants: [
+      { name: "R 1250 GS", year: "2023", price: "~₹20.45 L" },
+      { name: "R 1250 GS Adventure", year: "2023", price: "~₹22.50 L" },
+    ]
+  },
+
+  "bmw s1000rr": {
+    brand: "BMW Motorrad", name: "S 1000 RR", year: "2009–Present",
+    category: "Supersport", origin: "Germany",
+    cc: "999", engine: "In-line 4-cylinder, DOHC, 16 valves, ShiftCam",
+    power: "210 hp @ 13,500 rpm", torque: "113 Nm @ 11,000 rpm",
+    topSpeed: "305 km/h", mileage: "14–17 km/l",
+    weight: "197 kg", fuelTank: "16.5 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "BMW's first superbike, the S 1000 RR arrived in 2009 and immediately redefined the class. It introduced electronics to the superbike world in a way no other manufacturer had and continues to lead in chassis precision.",
+    history: "Debuted in 2009, winning the Superstock 1000 class immediately. The 2019 complete redesign introduced the asymmetric face (removed 2023), M Package, and a stiffer aluminum frame. The 2023 model added ShiftCam to the superbike.",
+    specialty: "ShiftCam variable valve timing, BMW Motorrad DDC Dynamic Damping Control, 6-axis IMU, Cornering ABS, Slide Control, Pit Lane Limiter, Launch Control, DTC Pro",
+    pros: ["German engineering precision", "Best electronics package", "Comfortable ergonomics for class", "Strong WSBK pedigree"],
+    tags: ["Superbike", "German Engineering", "Electronics King", "Track"],
+    variants: [
+      { name: "S 1000 RR", year: "2023", price: "~₹20.25 L" },
+      { name: "S 1000 RR M Package", year: "2023", price: "~₹23.50 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  HONDA
+  // ══════════════════════════════════════════════════════════
+  "honda cbr1000rr": {
+    brand: "Honda", name: "CBR 1000RR-R Fireblade SP", year: "2020–Present",
+    category: "Supersport", origin: "Japan",
+    cc: "999.9", engine: "In-line 4-cylinder, DOHC, 16 valves, semi-cam center",
+    power: "217 hp @ 14,500 rpm", torque: "113 Nm @ 12,500 rpm",
+    topSpeed: "310 km/h", mileage: "13–16 km/l",
+    weight: "201 kg", fuelTank: "16.1 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Honda CBR1000RR-R Fireblade SP represents Honda's most focused, MotoGP-derived superbike yet. Developed with data and components directly from Honda's HRC RC213V-S programme.",
+    history: "The Fireblade name dates to 1992's CBR900RR which stunned the world with its mass centralization philosophy. The 2020 RR-R is a complete ground-up redesign with MotoGP genes.",
+    specialty: "Semi-cam center layout (RC213V-S), Öhlins Smart EC 2.0 active suspension, Brembo Stylema calipers, 6-axis IMU, Honda Selectable Torque Control (HSTC), 5 riding modes",
+    pros: ["MotoGP RC213V-S DNA", "Best peak power in class", "Premium Öhlins/Brembo hardware", "Honda reliability"],
+    tags: ["Superbike", "MotoGP DNA", "Japanese", "Track Weapon"],
+    variants: [
+      { name: "CBR1000RR-R Fireblade", year: "2023", price: "~₹23.50 L" },
+      { name: "CBR1000RR-R Fireblade SP", year: "2023", price: "~₹28.80 L" },
+    ]
+  },
+
+  "honda cb350": {
+    brand: "Honda", name: "H'ness CB350", year: "2020–Present",
+    category: "Classic / Heritage", origin: "Japan/India",
+    cc: "348.36", engine: "Single cylinder, SOHC, air-cooled",
+    power: "21 hp @ 5,500 rpm", torque: "30 Nm @ 3,000 rpm",
+    topSpeed: "140 km/h", mileage: "40–45 km/l",
+    weight: "181 kg", fuelTank: "15 L",
+    transmission: "5-speed", cooling: "Air cooled",
+    intro: "Honda's answer to the Royal Enfield Classic 350, the H'ness CB350 is a premium heritage motorcycle with exceptional refinement and Honda's legendary build quality.",
+    history: "Launched in 2020 exclusively for India, the H'ness CB350 was Honda's strategic move into the 350cc premium retro segment. It features a dual exhaust note and a smooth, vibration-free engine.",
+    specialty: "Dual LED headlight, Honda Smartphone Voice Control (HSVC), Honda Selectable Torque Control, Dual Channel ABS, low-RPM assist, assist and slipper clutch",
+    pros: ["Best refinement in class", "Honda reliability", "Smooth engine", "Feature-rich"],
+    tags: ["Heritage", "Classic", "Honda", "Premium Budget"],
+    variants: [
+      { name: "H'ness CB350 DLX", year: "2023", price: "~₹2.05 L" },
+      { name: "H'ness CB350 DLX Pro", year: "2023", price: "~₹2.09 L" },
+      { name: "CB350RS", year: "2023", price: "~₹2.07 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  HARLEY-DAVIDSON
+  // ══════════════════════════════════════════════════════════
+  "harley-davidson sportster": {
+    brand: "Harley-Davidson", name: "Sportster S", year: "2021–Present",
+    category: "Cruiser", origin: "USA",
+    cc: "1252", engine: "Revolution Max 1250T V-Twin, liquid cooled",
+    power: "121 hp @ 7,500 rpm", torque: "125 Nm @ 6,000 rpm",
+    topSpeed: "190 km/h", mileage: "16–20 km/l",
+    weight: "228 kg", fuelTank: "11.8 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Sportster S marks a radical new chapter for Harley-Davidson's most iconic sub-brand. The Revolution Max engine breaks with tradition by using liquid cooling and making it a structural chassis member.",
+    history: "The Sportster lineage began in 1957 and is one of the longest continuously produced motorcycle models. The S model (2021) represents the most dramatic reinvention, using the Pan America's 1250 engine in a low aggressive chassis.",
+    specialty: "Revolution Max engine as stressed member, lean-sensitive traction control, cornering ABS, drag-strip ready ergonomics, 4-inch round TFT, 3 riding modes, forward controls",
+    pros: ["True American muscle", "Modern technology in Harley", "Excellent low-end torque", "Iconic brand"],
+    tags: ["Cruiser", "American", "V-Twin", "Icon", "Modern"],
+    variants: [
+      { name: "Sportster S", year: "2023", price: "~₹15.51 L" },
+    ]
+  },
+
+  "harley-davidson fat boy": {
+    brand: "Harley-Davidson", name: "Fat Boy", year: "1990–Present",
+    category: "Cruiser / Softail", origin: "USA",
+    cc: "1745", engine: "Milwaukee-Eight 114 V-Twin, air/oil cooled",
+    power: "93 hp @ 5,020 rpm", torque: "155 Nm @ 3,250 rpm",
+    topSpeed: "175 km/h", mileage: "14–18 km/l",
+    weight: "317 kg", fuelTank: "18.9 L",
+    transmission: "6-speed", cooling: "Air/oil cooled",
+    intro: "The Harley-Davidson Fat Boy is one of the most recognizable motorcycles in the world, a Hollywood icon that gained worldwide fame in Terminator 2. Its solid-disc wheels are unmistakable.",
+    history: "Introduced in 1990 with its unusual solid aluminum disc wheels, the Fat Boy became an instant icon. Terminator 2 (1991) cemented its global fame when Arnold Schwarzenegger rode one.",
+    specialty: "Signature solid disc wheels (both), Milwaukee-Eight 114 engine, Softail frame hides rear shock, forward footpegs, chopped rear fender, wide 240mm rear tire",
+    pros: ["Hollywood icon", "Massive presence", "Smooth Milwaukee-Eight engine", "Low seat height"],
+    tags: ["Cruiser", "Icon", "Softail", "Hollywood", "V-Twin"],
+    variants: [
+      { name: "Fat Boy 114", year: "2023", price: "~₹26.21 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  YAMAHA
+  // ══════════════════════════════════════════════════════════
+  "yamaha mt-09": {
+    brand: "Yamaha", name: "MT-09", year: "2013–Present",
+    category: "Naked Hyper Naked", origin: "Japan",
+    cc: "889", engine: "3-cylinder CP3 crossplane, DOHC, 12 valves",
+    power: "119 hp @ 10,000 rpm", torque: "93 Nm @ 7,000 rpm",
+    topSpeed: "220 km/h", mileage: "18–22 km/l",
+    weight: "193 kg", fuelTank: "14 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Yamaha MT-09 introduced the world to the 3-cylinder CP3 engine and created an entirely new character of motorcycle: the 'Dark Side of Japan.' Its trademark torquey, aggressive power delivery is unlike anything else.",
+    history: "Launched in 2013, the MT-09 disrupted the middleweight naked class. The 3-cylinder engine sits between a twin's torque and a four's revviness. The 2021 redesign brought 6-axis IMU and a superbike-class electronics suite.",
+    specialty: "CP3 crossplane 3-cylinder engine (unique firing intervals), 6-axis IMU, Slide Control, Traction Control, Quick Shift System, 3 riding modes, LED headlight with DRL, TFT display",
+    pros: ["Most unique engine character", "Light and nimble", "Excellent value", "Exciting performance"],
+    tags: ["Naked", "3-Cylinder", "Hyper Naked", "Street"],
+    variants: [
+      { name: "MT-09", year: "2023", price: "~₹9.99 L" },
+      { name: "MT-09 SP", year: "2023", price: "~₹11.50 L" },
+    ]
+  },
+
+  "yamaha r1": {
+    brand: "Yamaha", name: "YZF-R1", year: "1998–Present",
+    category: "Supersport", origin: "Japan",
+    cc: "998", engine: "Crossplane 4-cylinder (YCCT), DOHC, 16 valves",
+    power: "200 hp @ 13,500 rpm", torque: "112.4 Nm @ 11,500 rpm",
+    topSpeed: "299 km/h", mileage: "13–16 km/l",
+    weight: "201 kg", fuelTank: "17 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Yamaha R1 is one of the most important motorcycles ever made. Its crossplane crankshaft technology, borrowed directly from the MotoGP M1, gives it a riding feel unlike any other inline-four.",
+    history: "The R1 debuted in 1998 and immediately redefined superbike performance. The 2009 crossplane crankshaft was the game-changer, followed by the 2015 complete redesign with full electronics suite derived from the M1 MotoGP bike.",
+    specialty: "Crossplane Crankshaft (unique firing intervals), 6-axis IMU, Slide Control, Launch Control, Lift Control, Quickshifter/Autoblipper, 4 Power Modes, TCS Traction Control",
+    pros: ["Unique engine character", "MotoGP M1 DNA", "Best electronics suite", "Legendary name"],
+    tags: ["Superbike", "MotoGP DNA", "Crossplane", "Track"],
+    variants: [
+      { name: "YZF-R1", year: "2023", price: "~₹20.49 L" },
+      { name: "YZF-R1M", year: "2023", price: "~₹28.73 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  SUZUKI
+  // ══════════════════════════════════════════════════════════
+  "suzuki hayabusa": {
+    brand: "Suzuki", name: "Hayabusa (GSX1300R)", year: "1999–Present",
+    category: "Hypersport", origin: "Japan",
+    cc: "1340", engine: "In-line 4-cylinder, DOHC, 16 valves",
+    power: "188 hp @ 9,700 rpm", torque: "150 Nm @ 7,000 rpm",
+    topSpeed: "299 km/h (limited)", mileage: "13–17 km/l",
+    weight: "266 kg", fuelTank: "20 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The Suzuki Hayabusa is a legend in every sense. Named after Japan's Peregrine Falcon (the world's fastest bird), it was the world's fastest production motorcycle when it launched in 1999.",
+    history: "Launched in 1999 at a claimed 312 km/h, sparking a 'horsepower war' that prompted gentleman's agreements between manufacturers. The 2021 third generation completely redesigned the Hayabusa with modern electronics while retaining its iconic silhouette.",
+    specialty: "Iconic aerodynamic 'Busa' bodywork, 9-level traction control, active speed limiter, drag race mode, 3 riding modes, bidirectional quickshifter, Brembo monobloc calipers, cornering ABS",
+    pros: ["Living legend status", "Supreme high-speed stability", "Massive low-end torque", "Iconic styling"],
+    tags: ["Hypersport", "Legendary", "Speed Icon", "Japanese"],
+    variants: [
+      { name: "Hayabusa", year: "2023", price: "~₹16.40 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  KTM
+  // ══════════════════════════════════════════════════════════
+  "ktm duke 390": {
+    brand: "KTM", name: "390 Duke", year: "2013–Present",
+    category: "Naked", origin: "Austria/India",
+    cc: "373", engine: "Single cylinder, LC4c, DOHC, liquid cooled",
+    power: "44 hp @ 9,000 rpm", torque: "37 Nm @ 7,000 rpm",
+    topSpeed: "170 km/h", mileage: "28–34 km/l",
+    weight: "163 kg", fuelTank: "13.4 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The KTM 390 Duke put performance motorcycle ownership within reach of a generation. Its race-derived technology at an accessible price made it the definitive beginner-to-expert 400cc naked bike.",
+    history: "Launched globally in 2013 and made in India via Bajaj partnership, the 390 Duke brought WP suspension, Brembo brakes, and MotoGP-inspired styling to a segment that had only offered basic Japanese middleweights.",
+    specialty: "WP Apex suspension, Supermoto ABS, traction control, lean-angle sensor (2023), TFT display, cornering ABS (2023), track mode, quickshifter, slipper clutch",
+    pros: ["Most performance per rupee", "Incredible fun factor", "Strong Bajaj service network", "Beginner to advanced"],
+    tags: ["Naked", "Fun", "Value", "Beginner", "Austrian"],
+    variants: [
+      { name: "390 Duke", year: "2023", price: "~₹3.11 L" },
+    ]
+  },
+
+  "ktm rc 390": {
+    brand: "KTM", name: "RC 390", year: "2014–Present",
+    category: "Sport", origin: "Austria/India",
+    cc: "373", engine: "Single cylinder, DOHC, liquid cooled",
+    power: "46 hp @ 9,500 rpm", torque: "39 Nm @ 7,250 rpm",
+    topSpeed: "180 km/h", mileage: "28–32 km/l",
+    weight: "163 kg", fuelTank: "13.7 L",
+    transmission: "6-speed", cooling: "Liquid cooled",
+    intro: "The KTM RC 390 is a full-fairing sports bike built on the 390 Duke platform. Its radical track-inspired styling, MotoGP-derived aerodynamics and Brembo braking makes it feel like a miniature superbike.",
+    history: "Launched in 2014, the RC 390 became the definitive track-day tool for young riders. The 2022 redesign brought winglets, a dedicated track mode, enhanced electronics, and Moto3-inspired aerodynamics.",
+    specialty: "Moto3-inspired winglets (2022), Supermoto ABS, track mode (disables ABS completely), quickshifter, WP Apex suspension, Brembo monoblock calipers, lean-angle TFT",
+    pros: ["Race-bred styling", "Track-capable out of the box", "Lightweight", "Incredible braking"],
+    tags: ["Sport", "Track", "Race Inspired", "Beginner Racer"],
+    variants: [
+      { name: "RC 390", year: "2023", price: "~₹3.39 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  TRIUMPH
+  // ══════════════════════════════════════════════════════════
+  "triumph bonneville t120": {
+    brand: "Triumph", name: "Bonneville T120", year: "2016–Present",
+    category: "Classic / Retro", origin: "UK",
+    cc: "1200", engine: "HT High Torque Parallel Twin, SOHC",
+    power: "79 hp @ 6,550 rpm", torque: "105 Nm @ 3,500 rpm",
+    topSpeed: "193 km/h", mileage: "20–24 km/l",
+    weight: "224 kg", fuelTank: "14.5 L",
+    transmission: "6-speed", cooling: "Air/liquid hybrid (High Torque)",
+    intro: "The Triumph Bonneville T120 is perhaps the most emotionally resonant motorcycle in history. The Bonneville name comes from the Bonneville Salt Flats where it set land speed records.",
+    history: "Originally launched in 1959, the Bonneville was Britain's answer to American hot rods. Revived by modern Triumph in 2001, the T120 designation marks its 1200cc displacement in tribute to the original's displacement growth.",
+    specialty: "Ride-by-wire, traction control, two riding modes (Road/Rain), USB charger, high grade genuine leather seat option, cafe racer styling, Brembo brakes",
+    pros: ["Iconic British heritage", "Usable performance", "Beautiful design", "Versatile character"],
+    tags: ["Classic", "British", "Heritage", "Retro Modern"],
+    variants: [
+      { name: "Bonneville T120", year: "2023", price: "~₹11.49 L" },
+      { name: "Bonneville T120 Black", year: "2023", price: "~₹11.49 L" },
+      { name: "Bonneville T120 Gold Line", year: "2023", price: "~₹13.49 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  MV AGUSTA
+  // ══════════════════════════════════════════════════════════
+  "mv agusta f4": {
+    brand: "MV Agusta", name: "F4", year: "1999–2019",
+    category: "Supersport", origin: "Italy",
+    cc: "998", engine: "In-line 4-cylinder, DOHC, 16 valves, radial valves",
+    power: "183 hp (RR: 212 hp)", torque: "111 Nm",
+    topSpeed: "299 km/h", mileage: "12–15 km/l",
+    weight: "190 kg", fuelTank: "17 L",
+    transmission: "6-speed cassette", cooling: "Liquid cooled",
+    intro: "The MV Agusta F4 is among the most beautiful motorcycles ever designed. Created by Massimo Tamburini, the designer of the Ducati 916, it is considered an art piece that also happens to be an extraordinary motorcycle.",
+    history: "Launched in 1999, the F4 was the first MV Agusta after the brand was revived by Ferrari and Claudio Castiglioni. Tamburini's design featured a radial valve cylinder head, integrated exhaust headers, and four underseat exhausts.",
+    specialty: "Tamburini design, underseat quad exhaust pipes, radial valve engine, cassette gearbox, ultra-compact proportions, hand-built Italian craftsmanship",
+    pros: ["Most beautiful bike ever made", "Racing heritage", "Exclusive", "Collector's item"],
+    tags: ["Exotic", "Italian Art", "Supersport", "Collector"],
+    variants: [
+      { name: "F4 1000", year: "2010", price: "~$17,000" },
+      { name: "F4 RR", year: "2014", price: "~$30,000" },
+      { name: "F4 RC", year: "2015", price: "~$35,000" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  HERO
+  // ══════════════════════════════════════════════════════════
+  "hero splendor plus": {
+    brand: "Hero MotoCorp", name: "Splendor Plus", year: "1994–Present",
+    category: "Commuter", origin: "India",
+    cc: "97.2", engine: "Single cylinder, air-cooled, 4-stroke",
+    power: "8.02 hp @ 8,000 rpm", torque: "8.05 Nm @ 6,000 rpm",
+    topSpeed: "95 km/h", mileage: "65–75 km/l",
+    weight: "111 kg", fuelTank: "9.8 L",
+    transmission: "4-speed", cooling: "Air cooled",
+    intro: "The Hero Splendor Plus is the world's best-selling motorcycle model for multiple years. It is the backbone of Indian mobility — affordable, efficient, and supremely practical for hundreds of millions of people.",
+    history: "Born as a joint venture with Honda, the Splendor launched in 1994 and rapidly became India's most popular motorcycle. After the Hero-Honda split in 2010, Hero MotoCorp continued the legacy, selling over 100 million units.",
+    specialty: "100+ million units sold (world record), iSmart technology (auto stop-start), sectional swing arm chassis, alloy wheels, integrated braking system",
+    pros: ["World's best-selling bike", "Exceptional fuel economy", "Ultra-reliable", "Cheapest to maintain"],
+    tags: ["Commuter", "World Record", "Budget", "Mass Market", "Indian"],
+    variants: [
+      { name: "Splendor Plus", year: "2023", price: "~₹75,000" },
+      { name: "Splendor Plus XTEC", year: "2023", price: "~₹79,000" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  APRILIA
+  // ══════════════════════════════════════════════════════════
+  "aprilia rsv4": {
+    brand: "Aprilia", name: "RSV4", year: "2009–Present",
+    category: "Supersport", origin: "Italy",
+    cc: "1099", engine: "V4 65° narrow angle, DOHC",
+    power: "217 hp @ 13,200 rpm", torque: "125 Nm @ 10,500 rpm",
+    topSpeed: "305 km/h", mileage: "13–16 km/l",
+    weight: "204 kg", fuelTank: "18.5 L",
+    transmission: "6-speed cassette", cooling: "Liquid cooled",
+    intro: "The Aprilia RSV4 is the most winning WorldSBK superbike of all time, featuring a narrow V4 engine unique in production motorcycles. Its motorsport obsession is equaled only by Ducati.",
+    history: "Developed to satisfy World Superbike homologation rules, the RSV4 debuted in 2009. Max Biaggi won the WSBK title immediately in 2010. The 1100cc evolution continued WSBK dominance into the 2020s.",
+    specialty: "Narrow 65° V4 (compact as a twin), Aprilia Performance Ride Control (APRC), adjustable engine geometry (V4), Öhlins suspension, Brembo M50 calipers, reverse cylinder firing order",
+    pros: ["Most WSBK wins", "Narrow V4 handling", "Italian engineering", "Adjustable geometry"],
+    tags: ["Superbike", "Italian", "WSBK Champion", "V4"],
+    variants: [
+      { name: "RSV4", year: "2023", price: "~₹25.11 L" },
+      { name: "RSV4 Factory", year: "2023", price: "~₹29.99 L" },
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  HONDA AFRICA TWIN / GS VARIANTS
+  // ══════════════════════════════════════════════════════════
+  "honda africa twin": {
+    brand: "Honda", name: "Africa Twin CRF1100L", year: "2020–Present",
+    category: "Adventure Tourer", origin: "Japan",
+    cc: "1082", engine: "Parallel-twin 270° firing, DOHC",
+    power: "101 hp @ 7,500 rpm", torque: "105 Nm @ 6,250 rpm",
+    topSpeed: "210 km/h", mileage: "20–24 km/l",
+    weight: "226 kg", fuelTank: "24.2 L",
+    transmission: "6-speed manual / DCT (dual clutch)", cooling: "Liquid cooled",
+    intro: "The Honda Africa Twin revives the legendary XRV750 that won the Paris-Dakar Rally. Named after its rally conquest of the African continent, it remains one of the most capable and beloved adventure bikes.",
+    history: "The original XRV750 Africa Twin won Paris-Dakar in 1986–1988. Reborn in 2016 with DCT option, the CRF1100L continues the lineage with Honda's Dual Clutch Transmission and proven off-road credentials.",
+    specialty: "Available DCT (no clutch lever), 5 riding modes, Honda Selectable Torque Control, off-road mode, wheelie control, cornering ABS, 24.2L massive tank, dedicated off-road geometry",
+    pros: ["Paris-Dakar legacy", "DCT innovation", "Massive fuel range", "True off-road ability"],
+    tags: ["Adventure", "Dakar Legacy", "DCT", "Long Range"],
+    variants: [
+      { name: "Africa Twin Standard", year: "2023", price: "~₹15.96 L" },
+      { name: "Africa Twin DCT", year: "2023", price: "~₹16.62 L" },
+      { name: "Africa Twin Adventure Sports DCT", year: "2023", price: "~₹18.80 L" },
+    ]
+  },
+};
+
+// ─── FEATURED LIST ─────────────────────────────────────────────────────────────
+const FEATURED = [
+  { key: "kawasaki ninja zx-10r", brand: "KAWASAKI", name: "Ninja ZX-10R", cc: "998cc" },
+  { key: "ducati panigale v4", brand: "DUCATI", name: "Panigale V4", cc: "1103cc" },
+  { key: "suzuki hayabusa", brand: "SUZUKI", name: "Hayabusa", cc: "1340cc" },
+  { key: "yamaha r1", brand: "YAMAHA", name: "YZF-R1", cc: "998cc" },
+  { key: "bmw s1000rr", brand: "BMW", name: "S 1000 RR", cc: "999cc" },
+  { key: "honda cbr1000rr", brand: "HONDA", name: "CBR1000RR-R", cc: "999.9cc" },
+  { key: "royal enfield bullet 350", brand: "RE", name: "Bullet 350", cc: "349cc" },
+  { key: "hero splendor plus", brand: "HERO", name: "Splendor Plus", cc: "97.2cc" },
+  { key: "ktm duke 390", brand: "KTM", name: "390 Duke", cc: "373cc" },
+  { key: "triumph bonneville t120", brand: "TRIUMPH", name: "Bonneville T120", cc: "1200cc" },
+  { key: "mv agusta f4", brand: "MV AGUSTA", name: "F4", cc: "998cc" },
+  { key: "aprilia rsv4", brand: "APRILIA", name: "RSV4", cc: "1099cc" },
+];
+
+// ─── SEARCH LOGIC ──────────────────────────────────────────────────────────────
+function normalizeKey(str) {
+  return str.toLowerCase().replace(/[^a-z0-9\s\-]/g, '').trim();
+}
+
+function findBike(query) {
+  const q = normalizeKey(query);
+
+  // Direct match
+  if (BIKES[q]) return BIKES[q];
+
+  // Fuzzy match - find best match
+  let best = null, bestScore = 0;
+  for (const [key, bike] of Object.entries(BIKES)) {
+    const words = q.split(/\s+/);
+    let score = 0;
+    words.forEach(w => {
+      if (key.includes(w) || (bike.name.toLowerCase().includes(w)) || (bike.brand.toLowerCase().includes(w))) {
+        score += w.length > 3 ? 3 : 1;
+      }
+    });
+    if (key.includes(q) || q.includes(key)) score += 10;
+    if (score > bestScore) { bestScore = score; best = bike; }
+  }
+  return bestScore > 2 ? best : null;
+}
+
+function statBar(label, value, max, unit = '') {
+  const pct = Math.min(100, (value / max) * 100);
+  return `<div class="stat-bar-wrap">
+    <div class="stat-bar-label"><span>${label}</span><span>${value}${unit}</span></div>
+    <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+
+function renderBike(bike) {
+  const powerNum = parseInt(bike.power);
+  const torqueNum = parseInt(bike.torque);
+  const speedNum = parseInt(bike.topSpeed);
+  const mileageNum = parseInt(bike.mileage);
+  const weightNum = parseInt(bike.weight);
+  const ccNum = parseFloat(bike.cc);
+
+  const variantsRows = bike.variants.map(v =>
+    `<tr><td>${v.name}</td><td>${v.year}</td><td>${v.price}</td></tr>`
+  ).join('');
+
+  return `
+    <div class="result-header">
+      <div class="result-name">${bike.brand} ${bike.name}</div>
+      <div class="result-year">${bike.year} · ${bike.category} · ${bike.origin}</div>
+    </div>
+
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-label">DISPLACEMENT</div>
+        <div class="spec-value">${bike.cc}<span class="spec-unit">CC</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">PEAK POWER</div>
+        <div class="spec-value" style="font-size:1.4rem">${bike.power}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">MAX TORQUE</div>
+        <div class="spec-value" style="font-size:1.4rem">${bike.torque}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">TOP SPEED</div>
+        <div class="spec-value">${speedNum}<span class="spec-unit">KM/H</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">MILEAGE</div>
+        <div class="spec-value" style="font-size:1.3rem">${bike.mileage}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">WEIGHT</div>
+        <div class="spec-value">${bike.weight}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">FUEL TANK</div>
+        <div class="spec-value">${bike.fuelTank}</div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-label">TRANSMISSION</div>
+        <div class="spec-value" style="font-size:1.1rem;line-height:1.2">${bike.transmission}</div>
+      </div>
+    </div>
+
+    <div class="info-row" style="margin-top:2px">
+      <div class="info-card">
+        <div class="info-card-title">ENGINE TYPE</div>
+        <p>${bike.engine}</p>
+        <p style="margin-top:8px;font-size:0.85rem;color:#555">Cooling: ${bike.cooling}${bike.frame ? ' · Frame: ' + bike.frame : ''}</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">PERFORMANCE RATINGS</div>
+        ${statBar('POWER', powerNum, 220, ' hp')}
+        ${statBar('TORQUE', torqueNum, 200, ' Nm')}
+        ${statBar('TOP SPEED', speedNum, 320, ' km/h')}
+        ${statBar('MILEAGE', mileageNum, 75, ' km/l')}
+      </div>
+    </div>
+
+    <div class="info-row" style="margin-top:2px">
+      <div class="info-card">
+        <div class="info-card-title">OVERVIEW</div>
+        <p>${bike.intro}</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">HISTORY & LEGACY</div>
+        <p>${bike.history}</p>
+      </div>
+    </div>
+
+    <div class="info-card full" style="margin-top:2px">
+      <div class="info-card-title">SPECIAL FEATURES & TECHNOLOGY</div>
+      <p>${bike.specialty}</p>
+      <div class="tag-list">
+        ${bike.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="info-card full" style="margin-top:2px">
+      <div class="info-card-title">VARIANTS & PRICING</div>
+      <table class="variants-table">
+        <thead><tr><th>VARIANT</th><th>YEAR</th><th>APPROX. PRICE</th></tr></thead>
+        <tbody>${variantsRows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function searchBike() {
+  const query = document.getElementById('bikeSearch').value.trim();
+  if (!query) return;
+
+  const resultsDiv = document.getElementById('results');
+  const featuredSection = document.getElementById('featuredSection');
+  resultsDiv.innerHTML = '<div class="loading">SEARCHING DATABASE...</div>';
+  featuredSection.style.display = 'none';
+
+  setTimeout(() => {
+    const bike = findBike(query);
+    if (bike) {
+      resultsDiv.innerHTML = renderBike(bike);
+    } else {
+      resultsDiv.innerHTML = `
+        <div class="error-state">
+          <div class="big">404</div>
+          <p>NO BIKE FOUND FOR "${query.toUpperCase()}"</p>
+          <p style="margin-top:12px;font-size:0.8rem">Try: Kawasaki Ninja ZX-10R, Ducati Panigale V4, Royal Enfield Bullet 350...</p>
+          <p style="margin-top:8px;font-size:0.75rem;color:#333">Database contains 20+ iconic motorcycles. More bikes are constantly being added.</p>
+        </div>`;
+    }
+  }, 400);
+}
+
+function quickSearch(name) {
+  document.getElementById('bikeSearch').value = name;
+  searchBike();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Enter key
+document.getElementById('bikeSearch').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') searchBike();
+});
+
+// Featured grid
+const grid = document.getElementById('featuredGrid');
+FEATURED.forEach(f => {
+  const card = document.createElement('div');
+  card.className = 'featured-card';
+  card.innerHTML = `<div class="fc-brand">${f.brand}</div><div class="fc-name">${f.name}</div><div class="fc-cc">${f.cc}</div>`;
+  card.onclick = () => quickSearch(f.name.includes('Splendor') ? 'Hero Splendor Plus' : `${f.brand.replace('RE','Royal Enfield').replace('KAWASAKI','Kawasaki').replace('DUCATI','Ducati').replace('SUZUKI','Suzuki').replace('YAMAHA','Yamaha').replace('BMW','BMW').replace('HONDA','Honda').replace('KTM','KTM').replace('TRIUMPH','Triumph').replace('MV AGUSTA','MV Agusta').replace('APRILIA','Aprilia')} ${f.name}`);
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
